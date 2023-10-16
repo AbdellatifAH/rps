@@ -6,22 +6,44 @@ function getComputerChoice() {
     return choices[index];
 }
 
-function round(pc, cc) {
-    let result;
-    pc = pc.toLowerCase();
-    if (pc === cc) result = "It's a tie";
-    else {
-        if (pc === "rock") {
-            if (cc === "scissors") result = "You Win, Rock beats Scissors";
-            if (cc === "paper") result = "You Lose, Paper beats Rock";
-        } else if (pc === "scissors") {
-            if (cc === "paper") result = "You Win, Scissors beats Paper";
-            if (cc === "rock") result = "You Lose, Rock beats Scissors";
-        } else if (pc === "paper") {
-            if (cc === "scissors") result = "You Lose, Scissors beats Paper";
-            if (cc === "rock") result = "You Win, Paper beats Rock";
-        } else result = "error";
-    }
-    return result;
+function round(hc, cc) {
+    //This function is to determine the winner
+    let result; // h = Human , c = Computer
+    hc = hc.toLowerCase();
+    if (hc === cc) result = "t";
+    else{
+    if (hc === "rock") {
+        if (cc === "scissors") result = "h";
+        if (cc === "paper") result = "c";
+    } else if (hc === "scissors") {
+        if (cc === "paper") result = "h";
+        if (cc === "rock") result = "c";
+    } else if (hc === "paper") {
+        if (cc === "scissors") result = "c";
+        if (cc === "rock") result = "h";
+    } else result = "e";
 }
-console.log(round(prompt("Rock, Paper, Scissors, Your choice"), getComputerChoice()));
+return result;
+}
+
+function game() {
+    //This function is to start a game;
+    let hs = 0;
+    let cs = 0;
+    for (let i = 0; i < 5; i++) {
+        let result = round(
+            prompt("enter Rock, Paper, Scissors"),
+            getComputerChoice()
+        );
+        if (result === "h") hs++;
+        else if (result === "t") cs++;
+        else if (result === "e") {
+            console.log("input error, try again"); // this to cancel the round if the input is invalid
+            i--;
+        }
+        console.log(`Your score is ${hs}, Computer score ${cs}`);
+        if (hs >= 3 || cs >= 3) break;
+    }
+    if (hs > cs) console.log("You Win");
+    else console.log("You Lose");
+}
