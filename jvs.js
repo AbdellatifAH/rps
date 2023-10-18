@@ -1,4 +1,12 @@
+const rock = document.getElementById("rock");
+const paper = document.getElementById("paper");
+const scissors = document.getElementById("scissors");
+const resultt = document.getElementById("result");
+let hs = 0;
+let cs = 0;
+
 function getComputerChoice() {
+
     let choices = ["rock", "paper", "scissors"];
 
     let index = Math.floor(Math.random() * 3);
@@ -6,44 +14,47 @@ function getComputerChoice() {
     return choices[index];
 }
 
-function round(hc, cc) {
-    //This function is to determine the winner
-    let result; // h = Human , c = Computer
-    hc = hc.toLowerCase();
-    if (hc === cc) result = "t";
-    else{
-    if (hc === "rock") {
-        if (cc === "scissors") result = "h";
-        if (cc === "paper") result = "c";
-    } else if (hc === "scissors") {
-        if (cc === "paper") result = "h";
-        if (cc === "rock") result = "c";
-    } else if (hc === "paper") {
-        if (cc === "scissors") result = "c";
-        if (cc === "rock") result = "h";
-    } else result = "e";
-}
-return result;
-}
+function round(e) {
 
-function game() {
-    //This function is to start a game;
-    let hs = 0;
-    let cs = 0;
-    for (let i = 0; i < 5; i++) {
-        let result = round(
-            prompt("enter Rock, Paper, Scissors"),
-            getComputerChoice()
-        );
-        if (result === "h") hs++;
-        else if (result === "t") cs++;
-        else if (result === "e") {
-            console.log("input error, try again"); // this to cancel the round if the input is invalid
-            i--;
-        }
-        console.log(`Your score is ${hs}, Computer score ${cs}`);
-        if (hs >= 3 || cs >= 3) break;
+    const cc = getComputerChoice();
+    let hc = e.target.innerText;
+    hc = hc.toLowerCase();
+    let result = '';
+    if (hc === cc) result = "t";
+    else {
+        if (hc === "rock") {
+            if (cc === "scissors") result = "h";
+            if (cc === "paper") result = "c";
+        } else if (hc === "scissors") {
+            if (cc === "paper") result = "h";
+            if (cc === "rock") result = "c";
+        } else if (hc === "paper") {
+            if (cc === "scissors") result = "c";
+            if (cc === "rock") result = "h";
+        } else result = "e";
     }
-    if (hs > cs) console.log("You Win");
-    else console.log("You Lose");
+    if (result === "t") resultt.innerText = "Tie";
+    else if (result === "h") {
+        hs++;
+        if (hs === 5) {
+            resultt.innerText = "You Won the game";
+            rock.removeEventListener("click", round);
+            paper.removeEventListener("click", round);
+            scissors.removeEventListener("click", round);
+        }
+        else resultt.innerText = `You won the round\nYour score is ${hs}, Computer score is ${cs}`;
+    } else if (result === "c") {
+        cs++;
+        if (cs === 5) {
+            resultt.innerText = "You Lost the game";
+            rock.removeEventListener("click", round);
+            paper.removeEventListener("click", round);
+            scissors.removeEventListener("click", round);
+        }
+        else resultt.innerText = `Computer won the round\nYour score is ${hs}, Computer score is ${cs}`;
+
+    }
 }
+rock.addEventListener("click", round);
+paper.addEventListener("click", round);
+scissors.addEventListener("click", round);
